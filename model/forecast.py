@@ -13,21 +13,22 @@ def forecast_financials(
 
     forecasted_rows = []
     for year in range(1, forecast_years + 1):
-        revenue_growth_rate = float(forecast["revenue_growth_rate"])
-        operating_margin = float(forecast["operating_margin"])
-        tax_rate = float(forecast["tax_rate"])
-        da_percent = float(forecast["daPercentRevenue"])
-        capex_percent = float(forecast["capexPercentRevenue"])
-        nwc_percent = float(forecast["nwcPercentRevenue"])
+        revenue_growth_rate = forecast["revenue_growth_rate"]
+        operating_margin = forecast["operating_margin"]
+        tax_rate = forecast["tax_rate"]
+        da_percent = forecast["daPercentRevenue"]
+        capex_percent = forecast["capexPercentRevenue"]
+        nwc_percent = forecast["nwcPercentRevenue"]
 
         revenue = (
-            last_year_data["totalRevenue"] * (1 + revenue_growth_rate)
+            last_year_data["totalRevenue"] * (1 + revenue_growth_rate[year - 1])
             if year == 1
-            else forecasted_rows[-1]["totalRevenue"] * (1 + revenue_growth_rate)
+            else forecasted_rows[-1]["totalRevenue"] * (1 + revenue_growth_rate[year - 1])
         )
 
-        operating_income = revenue * operating_margin
-        income_tax_expense = operating_income * tax_rate
+        operating_income = revenue * operating_margin[year - 1]
+        
+        income_tax_expense = operating_income * tax_rate[year - 1]
         nopat = operating_income - income_tax_expense
         forecasted_rows.append(
             {
@@ -36,9 +37,9 @@ def forecast_financials(
                 "operatingIncome": operating_income,
                 "incomeTaxExpense": income_tax_expense,
                 "nopat": nopat,
-                "depreciationAndAmortization": revenue * da_percent,
-                "capitalExpenditures": revenue * capex_percent,
-                "netWorkingCapital": revenue * nwc_percent,
+                "depreciationAndAmortization": revenue * da_percent[year - 1],
+                "capitalExpenditures": revenue * capex_percent[year - 1],
+                "netWorkingCapital": revenue * nwc_percent[year - 1],
             }
         )
 
