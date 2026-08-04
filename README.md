@@ -28,4 +28,4 @@ Build a Python program that forecasts a company's financial performance and esti
 - WACC and terminal growth sensitivity table
 
 ## Initial Company
-Apple Inc. (AAPL)"# dcf-valuation-model" 
+Apple Inc. (AAPL)
