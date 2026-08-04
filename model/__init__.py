@@ -5,9 +5,9 @@ from .data import (
     build_historical_dataset,
     download_financial_statements,
     load_financial_statements,
-    validate_historical_data,
 )
 from .forecast import calculate_ufcf, forecast_financials
+from .validation import validate_historical_data
 from .valuation import (
     calculate_dcf_metrics,
     calculate_enterprise_value,
