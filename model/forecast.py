@@ -20,15 +20,22 @@ def forecast_financials(
         capex_percent = forecast["capexPercentRevenue"]
         nwc_percent = forecast["nwcPercentRevenue"]
 
+        # helper to support either scalar or per-year iterable inputs
+        def val_for(param, idx):
+            try:
+                return param[idx]
+            except Exception:
+                return param
+
         revenue = (
-            last_year_data["totalRevenue"] * (1 + revenue_growth_rate[year - 1])
+            last_year_data["totalRevenue"] * (1 + val_for(revenue_growth_rate, year - 1))
             if year == 1
-            else forecasted_rows[-1]["totalRevenue"] * (1 + revenue_growth_rate[year - 1])
+            else forecasted_rows[-1]["totalRevenue"] * (1 + val_for(revenue_growth_rate, year - 1))
         )
 
-        operating_income = revenue * operating_margin[year - 1]
-        
-        income_tax_expense = operating_income * tax_rate[year - 1]
+        operating_income = revenue * val_for(operating_margin, year - 1)
+
+        income_tax_expense = operating_income * val_for(tax_rate, year - 1)
         nopat = operating_income - income_tax_expense
         forecasted_rows.append(
             {
@@ -37,9 +44,9 @@ def forecast_financials(
                 "operatingIncome": operating_income,
                 "incomeTaxExpense": income_tax_expense,
                 "nopat": nopat,
-                "depreciationAndAmortization": revenue * da_percent[year - 1],
-                "capitalExpenditures": revenue * capex_percent[year - 1],
-                "netWorkingCapital": revenue * nwc_percent[year - 1],
+                "depreciationAndAmortization": revenue * val_for(da_percent, year - 1),
+                "capitalExpenditures": revenue * val_for(capex_percent, year - 1),
+                "netWorkingCapital": revenue * val_for(nwc_percent, year - 1),
             }
         )
 

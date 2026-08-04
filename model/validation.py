@@ -149,7 +149,14 @@ def validate_forecast_assumptions(
             f"Forecast years must be a positive integer. Received: {forecast_years}"
         )
      
-    for capex_percent in forecast_assumptions["forecast"]["capexPercentRevenue"]:
+    capex_vals = forecast_assumptions["forecast"]["capexPercentRevenue"]
+    # support either a scalar or an iterable of per-year values
+    try:
+        iterator = iter(capex_vals)
+    except TypeError:
+        iterator = [capex_vals]
+
+    for capex_percent in iterator:
         if capex_percent < 0:
             raise ValueError(
                 f"Capital expenditures as a percentage of revenue must be non-negative. Received: {capex_percent}"

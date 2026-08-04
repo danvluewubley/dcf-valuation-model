@@ -1,6 +1,6 @@
 """Financial model package."""
 
-from .assumptions import get_forecast_assumptions
+from .assumptions import get_custom_forecast_assumptions, get_historical_average_forecast_assumptions
 from .data import (
     build_historical_dataset,
     download_financial_statements,
@@ -16,7 +16,8 @@ from .valuation import (
 )
 
 __all__ = [
-    "get_forecast_assumptions",
+    "get_historical_average_forecast_assumptions",
+    "get_custom_forecast_assumptions",
     "download_financial_statements",
     "load_financial_statements",
     "build_historical_dataset",
