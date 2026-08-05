@@ -2,6 +2,8 @@ from .assumptions import (
     build_default_reverse_dcf_assumptions,
     find_implied_starting_growth_rate,
     get_recent_historical_data,
+    build_operating_margin_reverse_dcf_assumptions,
+    find_implied_starting_operating_margin
 )
 from .market import (
     calculate_market_enterprise_value,
@@ -26,4 +28,6 @@ __all__ = [
     "get_alpha_vantage_api_key",
     "get_latest_stock_price",
     "get_stock_price_data",
+    "build_operating_margin_reverse_dcf_assumptions",
+    "find_implied_starting_operating_margin",
 ]

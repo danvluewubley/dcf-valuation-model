@@ -16,6 +16,8 @@ from model.reverse_dcf_support import (
     get_stock_price_data,
     get_recent_historical_data,
     print_reverse_dcf_results,
+    build_operating_margin_reverse_dcf_assumptions,
+    find_implied_starting_operating_margin,
 )
 
 
@@ -55,45 +57,96 @@ def run_reverse_dcf(ticker: str) -> None:
         total_debt,
         cash,
     )
-
-    forecast_years = 5
-    fade_rate = 0.90
-    tolerance = 0.0001
-    max_iterations = 100
-
-    forecast_assumptions = build_default_reverse_dcf_assumptions(
-        forecast_years=forecast_years,
-        starting_growth_rate=0.20,
-        fade_rate=fade_rate,
-    )
-
-    recent_data = get_recent_historical_data(historical_data, years=forecast_years)
-
-    (
-        implied_growth_rate,
-        enterprise_value,
-        difference,
-        relative_error,
-        iterations,
-        forecasted_data,
-    ) = find_implied_starting_growth_rate(
-        recent_data,
-        market_enterprise_value,
-        forecast_assumptions,
-        fade_rate=fade_rate,
-        tolerance=tolerance,
-        max_iterations=max_iterations,
-    )
-
-    print_reverse_dcf_results(
-        ticker=ticker,
-        stock_price=stock_price,
-        market_enterprise_value=market_enterprise_value,
-        forecast_assumptions=forecast_assumptions,
-        implied_growth_rate=implied_growth_rate,
-        fade_rate=fade_rate,
-        difference=difference,
-        relative_error=relative_error,
-        iterations=iterations,
-        tolerance=tolerance,
-    )
+    
+    
+    variable = input("Select Reverse DCF Variable: 1. Revenue Growth or 2. Operating Margin: ")
+    
+    if variable == "1":
+        print("Running Reverse DCF for Revenue Growth...")
+        forecast_years = 5
+        fade_rate = 0.90
+        tolerance = 0.0001
+        max_iterations = 100
+    
+        forecast_assumptions = build_default_reverse_dcf_assumptions(
+            forecast_years=forecast_years,
+            starting_growth_rate=0.20,
+            fade_rate=fade_rate,
+        )
+    
+        recent_data = get_recent_historical_data(historical_data, years=forecast_years)
+    
+        (
+            implied_growth_rate,
+            enterprise_value,
+            difference,
+            relative_error,
+            iterations,
+            forecasted_data,
+        ) = find_implied_starting_growth_rate(
+            recent_data,
+            market_enterprise_value,
+            forecast_assumptions,
+            fade_rate=fade_rate,
+            tolerance=tolerance,
+            max_iterations=max_iterations,
+        )
+    
+        print_reverse_dcf_results(
+            ticker=ticker,
+            stock_price=stock_price,
+            market_enterprise_value=market_enterprise_value,
+            forecast_assumptions=forecast_assumptions,
+            implied_growth_rate=implied_growth_rate,
+            fade_rate=fade_rate,
+            difference=difference,
+            relative_error=relative_error,
+            iterations=iterations,
+            tolerance=tolerance,
+        )
+    elif variable == "2":
+        print("Running Reverse DCF for Operating Margin...")
+        forecast_years = 5
+        fade_rate = 0.90
+        tolerance = 0.0001
+        max_iterations = 100
+    
+        forecast_assumptions = build_operating_margin_reverse_dcf_assumptions(
+            forecast_years=forecast_years,
+            starting_operating_margin=0.20,
+            fade_rate=fade_rate,
+        )
+            
+        recent_data = get_recent_historical_data(historical_data, years=forecast_years)
+    
+        (
+            implied_operating_margin,
+            enterprise_value,
+            difference,
+            relative_error,
+            iterations,
+            forecasted_data,
+        ) = find_implied_starting_operating_margin(
+            recent_data,
+            market_enterprise_value,
+            forecast_assumptions,
+            fade_rate=fade_rate,
+            tolerance=tolerance,
+            max_iterations=max_iterations,
+        )
+    
+        print_reverse_dcf_results(
+            ticker=ticker,
+            stock_price=stock_price,
+            market_enterprise_value=market_enterprise_value,
+            forecast_assumptions=forecast_assumptions,
+            implied_growth_rate=implied_operating_margin,
+            fade_rate=fade_rate,
+            difference=difference,
+            relative_error=relative_error,
+            iterations=iterations,
+            tolerance=tolerance,
+        )
+    else:
+        raise ValueError("Invalid selection. Please choose either 1 or 2.")
+    
