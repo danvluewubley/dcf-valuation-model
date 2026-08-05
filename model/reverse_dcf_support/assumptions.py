@@ -95,7 +95,10 @@ def find_implied_starting_growth_rate(
         ]
 
         forecasted_data = forecast_financials(historical_data, forecast_assumptions)
-        forecasted_data = calculate_ufcf(forecasted_data)
+        forecasted_data = calculate_ufcf(
+            forecasted_data,
+            historical_data["operatingNetWorkingCapital"].iloc[-1],
+        )
 
         enterprise_value, _ = calculate_enterprise_value(
             forecasted_data,

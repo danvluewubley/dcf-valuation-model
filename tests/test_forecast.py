@@ -72,9 +72,9 @@ def test_calculate_ufcf():
         ]
     )
 
-    result = calculate_ufcf(forecasted_data)
+    result = calculate_ufcf(forecasted_data, prior_net_working_capital=10.0)
 
-    assert result.loc[0, "changeInOperatingNWC"] == pytest.approx(0.0)
+    assert result.loc[0, "changeInOperatingNWC"] == pytest.approx(1.0)
     assert result.loc[1, "changeInOperatingNWC"] == pytest.approx(1.1)
-    assert result.loc[0, "freeCashFlow"] == pytest.approx(16.5 + 11.0 - 5.5)
+    assert result.loc[0, "freeCashFlow"] == pytest.approx(16.5 + 11.0 - 5.5 - 1.0)
     assert result.loc[1, "freeCashFlow"] == pytest.approx(18.15 + 12.1 - 6.05 - 1.1)

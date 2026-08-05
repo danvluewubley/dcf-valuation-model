@@ -18,7 +18,7 @@ from model.valuation import (
 )
 
 
-def run_model(ticker: str) -> None:
+def run_model(ticker: str, analysis: str = "standard") -> None:
     output_dir = Path(__file__).parent.parent / "data" / ticker
     outputs_dir = Path(__file__).parent.parent / "outputs" / ticker
     # Ensure data and outputs directories exist before any writes
@@ -52,9 +52,17 @@ def run_model(ticker: str) -> None:
 
     cases = ["base", "bull", "bear"]
 
-    for case in cases:
-        pass
-    
+    if analysis == "standard":
+        cases = ["base"]
+    elif analysis == "scenarios":
+        cases = ["base", "bull", "bear"]
+    elif analysis == "sensitivity":
+        cases = ["base"]
+    else:
+        raise ValueError(
+            "Invalid analysis mode. Use standard, scenarios, sensitivity, reverse-growth, or reverse-margin."
+        )
+
     def run_scenario_model(case: str, historical_data: pd.DataFrame, output_dir: Path, outputs_dir: Path) -> None:
         if case == "base":
             forecast_assumptions = get_base_forecast_assumptions()
@@ -67,7 +75,10 @@ def run_model(ticker: str) -> None:
         validate_valuation_assumptions(forecast_assumptions["valuation"])
 
         forecasted_data = forecast_financials(historical_data, forecast_assumptions)
-        forecasted_data = calculate_ufcf(forecasted_data)
+        forecasted_data = calculate_ufcf(
+            forecasted_data,
+            historical_data["operatingNetWorkingCapital"].iloc[-1],
+        )
 
         # Ensure forecast output subdirectories exist
         outputs_forecast_dir = outputs_dir / "forecast_data"

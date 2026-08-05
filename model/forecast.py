@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Optional
 
 import pandas as pd
 
@@ -52,12 +52,19 @@ def forecast_financials(
 
     return pd.DataFrame(forecasted_rows)
 
-
-def calculate_ufcf(forecasted_data: pd.DataFrame) -> pd.DataFrame:
+def calculate_ufcf(
+    forecasted_data: pd.DataFrame,
+    prior_net_working_capital: Optional[float] = None,
+) -> pd.DataFrame:
     forecasted_data = forecasted_data.copy()
-    forecasted_data["changeInOperatingNWC"] = (
-        forecasted_data["netWorkingCapital"].diff().fillna(0)
-    )
+    forecasted_data["changeInOperatingNWC"] = forecasted_data["netWorkingCapital"].diff()
+    if prior_net_working_capital is not None and len(forecasted_data) > 0:
+        forecasted_data.iat[
+            0,
+            forecasted_data.columns.get_loc("changeInOperatingNWC"),
+        ] = forecasted_data.iloc[0]["netWorkingCapital"] - prior_net_working_capital
+    forecasted_data["changeInOperatingNWC"] = forecasted_data["changeInOperatingNWC"].fillna(0)
+    
     forecasted_data["freeCashFlow"] = (
         forecasted_data["nopat"]
         + forecasted_data["depreciationAndAmortization"]

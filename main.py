@@ -19,16 +19,23 @@ def parse_args() -> argparse.Namespace:
         help="Ticker symbol to value.",
     )
     parser.add_argument(
-        "--reverse",
-        action="store_true",
-        help="Run reverse DCF model.",
+        "--analysis",
+        choices=[
+            "standard",
+            "scenarios",
+            "sensitivity",
+            "reverse-growth",
+            "reverse-margin",
+        ],
+        default="standard",
+        help="Analysis mode to run: standard, scenarios, sensitivity, reverse-growth, or reverse-margin.",
     )
     return parser.parse_args()
 
 
 if __name__ == "__main__":
     args = parse_args()
-    if args.reverse:
-        run_reverse_dcf(args.ticker)
+    if args.analysis in {"reverse-growth", "reverse-margin"}:
+        run_reverse_dcf(args.ticker, reverse_variable=args.analysis)
     else:
-        run_model(args.ticker)
+        run_model(args.ticker, analysis=args.analysis)

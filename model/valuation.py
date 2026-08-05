@@ -52,8 +52,8 @@ def calculate_enterprise_value(
     present_value_terminal = terminal_value / ((1 + WACC) ** len(forecasted_data))
     total_present_value = forecasted_data["present_value"].sum() + present_value_terminal
 
-    print(f"Total Present Value of Forecasted Cash Flows: {total_present_value}")
-    print(f"Present Value of Terminal Value: {present_value_terminal}")
+    # print(f"Total Present Value of Forecasted Cash Flows: {total_present_value}")
+    # print(f"Present Value of Terminal Value: {present_value_terminal}")
 
     return float(total_present_value), float(present_value_terminal)
 
