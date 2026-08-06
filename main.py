@@ -70,7 +70,12 @@ if __name__ == "__main__":
     elif args.analysis == "scenarios":
         run_model(args.ticker, analysis=args.analysis)
     elif args.analysis == "standard":
-        run_model(args.ticker, args.analysis, args.wacc, args.terminal_growth)
+        run_model(
+            args.ticker,
+            args.analysis,
+            args.wacc if args.wacc is not None else 0.1091,
+            args.terminal_growth if args.terminal_growth is not None else 0.025,
+        )
     else:
         raise ValueError(
             f"Unsupported analysis mode: {args.analysis}"
