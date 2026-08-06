@@ -112,7 +112,7 @@ def build_historical_dataset(
             "incomeBeforeTax": extract_float_column(
                 financial_data, ["incomeBeforeTax"], "incomeBeforeTax"
             ),
-            "nopat": extract_float_column(
+            "netIncome": extract_float_column(
                 financial_data, ["netIncome"], "netIncome"
             ),
             "depreciationAndAmortization": extract_float_column(

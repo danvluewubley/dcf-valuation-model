@@ -40,12 +40,26 @@ def run_model(ticker: str, analysis: str = "standard", wacc=0.1091, terminal_gro
     if outputs_historical_path.exists():
         print("Using cached historical data.")
         historical_data = pd.read_csv(outputs_historical_path)
+        try:
+            historical_data = (
+                historical_data.sort_values("fiscalDateEnding").tail(5).reset_index(drop=True)
+            )
+            historical_data = validate_historical_data(historical_data)
+        except ValueError as exc:
+            print("Cached historical data failed validation; rebuilding from raw financial data.")
+            historical_data = build_historical_dataset(
+                income_statement, balance_sheet, cash_flow
+            )
+            historical_data.to_csv(outputs_historical_path, index=False)
     else:
         historical_data = build_historical_dataset(
             income_statement, balance_sheet, cash_flow
         )
         historical_data.to_csv(outputs_historical_path, index=False)
         print("Built and saved historical data.")
+
+    if "historical_data" not in locals():
+        historical_data = pd.read_csv(outputs_historical_path)
 
     historical_data = (
         historical_data.sort_values("fiscalDateEnding").tail(5).reset_index(drop=True)

@@ -65,8 +65,13 @@ if __name__ == "__main__":
     args = parse_arguments()
     if args.analysis == "reverse-growth":
         run_reverse_dcf(args.ticker, args.analysis, args.fade_rate)
-        
+    elif args.analysis == "reverse-margin":
+        run_reverse_dcf(args.ticker, args.analysis, args.fade_rate)
     elif args.analysis == "scenarios":
         run_model(args.ticker, analysis=args.analysis)
     elif args.analysis == "standard":
         run_model(args.ticker, args.analysis, args.wacc, args.terminal_growth)
+    else:
+        raise ValueError(
+            f"Unsupported analysis mode: {args.analysis}"
+        )

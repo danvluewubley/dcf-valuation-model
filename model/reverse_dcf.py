@@ -16,7 +16,8 @@ from model.reverse_dcf_support import (
     get_latest_stock_price,
     get_stock_price_data,
     get_recent_historical_data,
-    print_reverse_dcf_results,
+    print_reverse_dcf_results_growth,
+    print_reverse_dcf_results_margin,
     build_operating_margin_reverse_dcf_assumptions,
     find_implied_starting_operating_margin,
 )
@@ -100,7 +101,7 @@ def run_reverse_dcf(ticker: str, reverse_variable: str = "reverse-growth", fade_
             max_iterations=max_iterations,
         )
     
-        print_reverse_dcf_results(
+        print_reverse_dcf_results_growth(
             ticker=ticker,
             stock_price=stock_price,
             market_enterprise_value=market_enterprise_value,
@@ -137,12 +138,12 @@ def run_reverse_dcf(ticker: str, reverse_variable: str = "reverse-growth", fade_
             max_iterations=max_iterations,
         )
 
-        print_reverse_dcf_results(
+        print_reverse_dcf_results_margin(
             ticker=ticker,
             stock_price=stock_price,
             market_enterprise_value=market_enterprise_value,
             forecast_assumptions=forecast_assumptions,
-            implied_growth_rate=implied_operating_margin,
+            implied_operating_margin=implied_operating_margin,
             fade_rate=fade_rate,
             difference=difference,
             relative_error=relative_error,

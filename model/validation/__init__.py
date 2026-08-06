@@ -13,7 +13,7 @@ def validate_historical_data(historical_data: pd.DataFrame) -> pd.DataFrame:
         "operatingIncome",
         "incomeTaxExpense",
         "incomeBeforeTax",
-        "nopat",
+        "netIncome",
         "depreciationAndAmortization",
         "capitalExpenditures",
         "cashAndCashEquivalents",

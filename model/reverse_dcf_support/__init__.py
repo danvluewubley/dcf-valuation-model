@@ -10,7 +10,7 @@ from .market import (
     ensure_directories,
     extract_market_inputs,
 )
-from .printing import print_reverse_dcf_results
+from .printing import print_reverse_dcf_results_growth, print_reverse_dcf_results_margin
 from .stock_price import (
     get_alpha_vantage_api_key,
     get_latest_stock_price,
@@ -24,7 +24,8 @@ __all__ = [
     "calculate_market_enterprise_value",
     "ensure_directories",
     "extract_market_inputs",
-    "print_reverse_dcf_results",
+    "print_reverse_dcf_results_growth",
+    "print_reverse_dcf_results_margin",
     "get_alpha_vantage_api_key",
     "get_latest_stock_price",
     "get_stock_price_data",

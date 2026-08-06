@@ -37,14 +37,14 @@ def forecast_financials(
         operating_income = revenue * val_for(operating_margin, year - 1)
 
         income_tax_expense = operating_income * val_for(tax_rate, year - 1)
-        nopat = operating_income - income_tax_expense
+        netIncome = operating_income - income_tax_expense
         forecasted_rows.append(
             {
                 "year": last_historical_year + year,
                 "totalRevenue": revenue,
                 "operatingIncome": operating_income,
                 "incomeTaxExpense": income_tax_expense,
-                "nopat": nopat,
+                "netIncome": netIncome,
                 "depreciationAndAmortization": revenue * val_for(da_percent, year - 1),
                 "capitalExpenditures": revenue * val_for(capex_percent, year - 1),
                 "netWorkingCapital": revenue * val_for(nwc_percent, year - 1),
@@ -68,7 +68,7 @@ def calculate_ufcf(
     forecasted_data["changeInOperatingNWC"] = forecasted_data["changeInOperatingNWC"].fillna(0)
     
     forecasted_data["freeCashFlow"] = (
-        forecasted_data["nopat"]
+        forecasted_data["netIncome"]
         + forecasted_data["depreciationAndAmortization"]
         - forecasted_data["capitalExpenditures"]
         - forecasted_data["changeInOperatingNWC"]

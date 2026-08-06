@@ -1,4 +1,4 @@
-def print_reverse_dcf_results(
+def print_reverse_dcf_results_growth(
     ticker: str,
     stock_price: float,
     market_enterprise_value: float,
@@ -27,6 +27,44 @@ def print_reverse_dcf_results(
 
     print("Fixed assumptions:")
     print(f"Operating margin: {forecast_assumptions['forecast']['operating_margin']}")
+    print(f"WACC: {forecast_assumptions['valuation']['WACC']:.2%}")
+    print(
+        f"Terminal growth rate: "
+        f"{forecast_assumptions['valuation']['terminal_growth_rate']:.2%}"
+    )
+    print(f"Model Difference: ${difference:,.2f} ({relative_error:.4%})")
+    print(f"Iterations: {iterations}")
+    print(f"Converged: {relative_error <= tolerance}")
+
+def print_reverse_dcf_results_margin(
+    ticker: str,
+    stock_price: float,
+    market_enterprise_value: float,
+    forecast_assumptions: dict,
+    implied_operating_margin: float,
+    fade_rate: float,
+    difference: float,
+    relative_error: float,
+    iterations: int,
+    tolerance: float,
+) -> None:
+    """Print the reverse DCF results, assumptions, and convergence metrics."""
+    growth_rates = forecast_assumptions["forecast"]["operating_margin"]
+
+    print("Reverse DCF results:")
+    print(f"Ticker: {ticker}")
+    print(f"Current Stock Price: ${stock_price:,.2f}")
+    print(f"Market Enterprise Value: ${market_enterprise_value:,.2f}")
+    print("Assumptions:")
+    print(f"Starting operating margin: {implied_operating_margin:.2%}")
+    print(f"Fade rate: {fade_rate:.2%}")
+    print(f"Ending revenue growth rate: {growth_rates[-1]:.2%}")
+    print("Implied Revenue Growth:")
+    for year_index, growth_rate in enumerate(growth_rates, start=1):
+        print(f"Year {year_index}: {growth_rate:.2%}")
+
+    print("Fixed assumptions:")
+    print(f"Revenue Growth: {forecast_assumptions['forecast']['revenue_growth_rate']}")
     print(f"WACC: {forecast_assumptions['valuation']['WACC']:.2%}")
     print(
         f"Terminal growth rate: "
