@@ -101,7 +101,7 @@ def find_implied_starting_growth_rate(
     difference = 0.0
 
     # Test whether the target EV is achievable at the maximum margin.
-    working_assumptions["forecast"]["operating_margin"] = [
+    working_assumptions["forecast"]["revenue_growth_rate"] = [
         high_growth * (fade_rate**i)
         for i in range(working_assumptions["forecast_years"])
     ]
@@ -195,7 +195,12 @@ def find_implied_starting_operating_margin(
         historical_data,
         working_assumptions,
     )
-    test_data = calculate_ufcf(test_data)
+    prior_nwc = historical_data["operatingNetWorkingCapital"].iloc[-1]
+
+    test_data = calculate_ufcf(
+        test_data,
+        prior_nwc,
+    )
 
     maximum_enterprise_value, _ = calculate_enterprise_value(
         test_data,
@@ -222,7 +227,7 @@ def find_implied_starting_operating_margin(
             historical_data,
             working_assumptions,
         )
-        forecasted_data = calculate_ufcf(forecasted_data)
+        forecasted_data = calculate_ufcf(forecasted_data, prior_nwc)
 
         enterprise_value, _ = calculate_enterprise_value(
             forecasted_data,
