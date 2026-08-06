@@ -86,6 +86,40 @@ def find_implied_starting_growth_rate(
     forecasted_data = None
     enterprise_value = 0.0
     difference = 0.0
+    
+    working_assumptions = deepcopy(forecast_assumptions)
+    
+    implied_growth = (
+        working_assumptions["forecast"]["revenue_growth_rate"][0]
+    )
+    forecasted_data = None
+    enterprise_value = 0.0
+    difference = 0.0
+
+    # Test whether the target EV is achievable at the maximum margin.
+    working_assumptions["forecast"]["operating_margin"] = [
+        high_growth * (fade_rate**i)
+        for i in range(working_assumptions["forecast_years"])
+    ]
+
+    test_data = forecast_financials(
+        historical_data,
+        working_assumptions,
+    )
+    test_data = calculate_ufcf(test_data)
+
+    maximum_enterprise_value, _ = calculate_enterprise_value(
+        test_data,
+        working_assumptions,
+    )
+
+    if maximum_enterprise_value < market_enterprise_value:
+        raise ValueError(
+            "No feasible operating margin found. "
+            f"A {high_growth:.1%} starting operating margin produces an "
+            f"enterprise value of ${maximum_enterprise_value:,.2f}, "
+            f"below the target of ${market_enterprise_value:,.2f}."
+        )
 
     for iteration in range(max_iterations):
         implied_growth_rate = (low_growth + high_growth) / 2

@@ -8,34 +8,64 @@ from model.reverse_dcf import run_reverse_dcf
 dotenv.load_dotenv()
 
 
-def parse_args() -> argparse.Namespace:
+def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Run a DCF valuation for a single ticker."
+        description=(
+            "Run standard DCF, scenario, sensitivity, "
+            "and reverse DCF analyses."
+        )
     )
+
     parser.add_argument(
         "ticker",
-        nargs="?",
-        default="AAPL",
-        help="Ticker symbol to value.",
+        type=str,
+        help="Stock ticker symbol, such as AAPL or MSFT.",
     )
+
     parser.add_argument(
         "--analysis",
         choices=[
             "standard",
             "scenarios",
-            "sensitivity",
             "reverse-growth",
             "reverse-margin",
         ],
         default="standard",
-        help="Analysis mode to run: standard, scenarios, sensitivity, reverse-growth, or reverse-margin.",
+        help="Type of valuation analysis to run.",
     )
+
+    parser.add_argument(
+        "--wacc",
+        type=float,
+        help="Optional WACC override as a decimal, such as 0.10.",
+    )
+
+    parser.add_argument(
+        "--terminal-growth",
+        type=float,
+        help=(
+            "Optional terminal growth override as a decimal, "
+            "such as 0.025."
+        ),
+    )
+
+    parser.add_argument(
+        "--fade-rate",
+        type=float,
+        default=0.90,
+        help="Reverse DCF fade rate. Default: 0.90.",
+    )
+    
+
     return parser.parse_args()
 
 
 if __name__ == "__main__":
-    args = parse_args()
-    if args.analysis in {"reverse-growth", "reverse-margin"}:
-        run_reverse_dcf(args.ticker, reverse_variable=args.analysis)
-    else:
+    args = parse_arguments()
+    if args.analysis == "reverse-growth":
+        run_reverse_dcf(args.ticker, args.analysis, args.fade_rate)
+        
+    elif args.analysis == "scenarios":
         run_model(args.ticker, analysis=args.analysis)
+    elif args.analysis == "standard":
+        run_model(args.ticker, args.analysis, args.wacc, args.terminal_growth)

@@ -18,7 +18,7 @@ from model.valuation import (
 )
 
 
-def run_model(ticker: str, analysis: str = "standard") -> None:
+def run_model(ticker: str, analysis: str = "standard", wacc=0.1091, terminal_growth_rate=0.025) -> None:
     output_dir = Path(__file__).parent.parent / "data" / ticker
     outputs_dir = Path(__file__).parent.parent / "outputs" / ticker
     # Ensure data and outputs directories exist before any writes
@@ -56,8 +56,6 @@ def run_model(ticker: str, analysis: str = "standard") -> None:
         cases = ["base"]
     elif analysis == "scenarios":
         cases = ["base", "bull", "bear"]
-    elif analysis == "sensitivity":
-        cases = ["base"]
     else:
         raise ValueError(
             "Invalid analysis mode. Use standard, scenarios, sensitivity, reverse-growth, or reverse-margin."
@@ -66,6 +64,9 @@ def run_model(ticker: str, analysis: str = "standard") -> None:
     def run_scenario_model(case: str, historical_data: pd.DataFrame, output_dir: Path, outputs_dir: Path) -> None:
         if case == "base":
             forecast_assumptions = get_base_forecast_assumptions()
+            forecast_assumptions["valuation"]["WACC"] = wacc
+            forecast_assumptions["valuation"]["terminal_growth_rate"] = terminal_growth_rate
+            print(forecast_assumptions)
         elif case == "bull":
             forecast_assumptions = get_bull_forecast_assumptions()
         elif case == "bear":

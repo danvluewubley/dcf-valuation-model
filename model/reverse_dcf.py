@@ -22,7 +22,7 @@ from model.reverse_dcf_support import (
 )
 
 
-def run_reverse_dcf(ticker: str, reverse_variable: str = "reverse-growth") -> None:
+def run_reverse_dcf(ticker: str, reverse_variable: str = "reverse-growth", fade_rate: float = 0.9) -> None:
     ticker = ticker.upper()
     alpha_vantage_api_key = get_alpha_vantage_api_key()
 
@@ -71,14 +71,14 @@ def run_reverse_dcf(ticker: str, reverse_variable: str = "reverse-growth") -> No
         )
 
     forecast_years = 5
-    fade_rate = 0.90
+    fade_rate = fade_rate
     tolerance = 0.0001
     max_iterations = 100
 
     if reverse_variable == "reverse-growth":
         forecast_assumptions = build_default_reverse_dcf_assumptions(
             forecast_years=forecast_years,
-            starting_growth_rate=0.20,
+            starting_growth_rate=0.2,
             fade_rate=fade_rate,
         )
     
@@ -114,7 +114,7 @@ def run_reverse_dcf(ticker: str, reverse_variable: str = "reverse-growth") -> No
     else:
         forecast_assumptions = build_operating_margin_reverse_dcf_assumptions(
             forecast_years=forecast_years,
-            starting_operating_margin=0.20,
+            starting_operating_margin=0.2,
             fade_rate=fade_rate,
         )
 
