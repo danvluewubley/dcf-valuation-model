@@ -8,6 +8,7 @@ def build_default_reverse_dcf_assumptions(
     starting_growth_rate: float = 0.20,
     fade_rate: float = 0.90,
 ) -> dict:
+    """Create a default reverse DCF assumption set for revenue growth, margins, and valuation."""
     return {
         "forecast_years": forecast_years,
         "forecast": {
@@ -38,6 +39,7 @@ def build_operating_margin_reverse_dcf_assumptions(
     starting_operating_margin: float = 0.30,
     fade_rate: float = 0.90,
 ) -> dict:
+    """Create reverse DCF assumptions focusing on operating margin decay rather than growth rates."""
     return {
         "forecast_years": forecast_years,
         "forecast": {
@@ -65,6 +67,7 @@ def build_operating_margin_reverse_dcf_assumptions(
 
 
 def get_recent_historical_data(historical_data, years: int = 5):
+    """Return the most recent N years of historical financial data."""
     return (
         historical_data.sort_values("fiscalDateEnding")
         .tail(years)
@@ -80,6 +83,7 @@ def find_implied_starting_growth_rate(
     tolerance: float = 0.0001,
     max_iterations: int = 100,
 ) -> tuple[float, float, float, float, int, dict]:
+    """Estimate the implied starting revenue growth rate needed to justify the market enterprise value."""
     low_growth = 0.0
     high_growth = 1.0
     implied_growth_rate = forecast_assumptions["forecast"]["revenue_growth_rate"][0]
@@ -168,6 +172,7 @@ def find_implied_starting_operating_margin(
     tolerance: float = 0.0001,
     max_iterations: int = 100,
 ) -> tuple[float, float, float, float, int, dict]:
+    """Find the implied operating margin path that matches a target market enterprise value."""
     low_margin = 0.0
     high_margin = 0.70
 

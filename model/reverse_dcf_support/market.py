@@ -2,6 +2,7 @@ from pathlib import Path
 
 
 def ensure_directories(project_root: Path, ticker: str) -> tuple[Path, Path]:
+    """Create and return the data and outputs directories for a ticker."""
     output_dir = project_root / "data" / ticker
     outputs_dir = project_root / "outputs" / ticker
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -10,6 +11,7 @@ def ensure_directories(project_root: Path, ticker: str) -> tuple[Path, Path]:
 
 
 def extract_market_inputs(latest_data: dict) -> tuple[float, float, float]:
+    """Extract market input values from latest stock and balance sheet data."""
     shares_outstanding = float(latest_data.get("commonStockSharesOutstanding", 0.0))
     total_debt = float(
         latest_data.get("shortTermDebt", 0.0)
@@ -35,5 +37,6 @@ def calculate_market_enterprise_value(
     total_debt: float,
     cash: float,
 ) -> float:
+    """Calculate the market enterprise value from stock price, shares, debt, and cash."""
     market_equity_value = stock_price * shares_outstanding
     return market_equity_value + total_debt - cash

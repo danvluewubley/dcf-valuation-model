@@ -6,6 +6,7 @@ import pandas as pd
 
 
 def validate_historical_data(historical_data: pd.DataFrame) -> pd.DataFrame:
+    """Validate a historical dataset and return it if it passes checks."""
     required_columns = [
         "fiscalDateEnding",
         "totalRevenue",
@@ -93,6 +94,7 @@ def validate_historical_data(historical_data: pd.DataFrame) -> pd.DataFrame:
 def validate_valuation_assumptions(
     valuation_assumptions: Mapping[str, Real],
 ) -> None:
+    """Validate required valuation assumption fields and their numeric ranges."""
     required_fields = {"WACC", "terminal_growth_rate"}
 
     missing_fields = required_fields - valuation_assumptions.keys()
@@ -130,6 +132,7 @@ def validate_valuation_assumptions(
 def validate_forecast_assumptions(
     forecast_assumptions: Mapping[str, object],
 ) -> None:
+    """Validate forecast assumption structure and ensure values are sane."""
     required_fields = {
         "forecast_years",
         "forecast",
@@ -165,6 +168,7 @@ def validate_forecast_assumptions(
     print("Forecast assumptions validation passed.")
 
 def validate_equity_inputs(outstanding_shares: float, total_debt: float, cash_and_cash_equivalents: float) -> None:
+    """Validate inputs used for equity value calculation."""
     if outstanding_shares <= 0:
         raise ValueError(
             f"Outstanding shares must be a positive number. Received: {outstanding_shares}"

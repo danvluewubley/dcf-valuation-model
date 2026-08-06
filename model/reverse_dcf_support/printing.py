@@ -10,6 +10,7 @@ def print_reverse_dcf_results(
     iterations: int,
     tolerance: float,
 ) -> None:
+    """Print the reverse DCF results, assumptions, and convergence metrics."""
     growth_rates = forecast_assumptions["forecast"]["revenue_growth_rate"]
 
     print("Reverse DCF results:")

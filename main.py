@@ -9,6 +9,7 @@ dotenv.load_dotenv()
 
 
 def parse_arguments() -> argparse.Namespace:
+    """Parse command-line arguments for valuation analysis."""
     parser = argparse.ArgumentParser(
         description=(
             "Run standard DCF, scenario, sensitivity, "

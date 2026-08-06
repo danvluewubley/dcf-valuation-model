@@ -9,6 +9,11 @@ STATEMENTS = ["INCOME_STATEMENT", "BALANCE_SHEET", "CASH_FLOW"]
 
 
 def require_api_key() -> str:
+    """Return the Alpha Vantage API key from the environment.
+
+    Raises:
+        RuntimeError: if the API key is not set.
+    """
     api_key = os.getenv("ALPHA_VANTAGE_API_KEY")
     if not api_key:
         raise RuntimeError(
@@ -18,6 +23,7 @@ def require_api_key() -> str:
 
 
 def download_financial_statements(ticker: str, output_dir: Path) -> None:
+    """Download annual financial statements for a ticker from Alpha Vantage."""
     output_dir.mkdir(parents=True, exist_ok=True)
     api_key = require_api_key()
 
@@ -52,6 +58,7 @@ def download_financial_statements(ticker: str, output_dir: Path) -> None:
 def load_financial_statements(
     ticker: str, output_dir: Path
 ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Load downloaded financial statement CSVs into DataFrames."""
     return (
         pd.read_csv(output_dir / f"{ticker}_INCOME_STATEMENT.csv"),
         pd.read_csv(output_dir / f"{ticker}_BALANCE_SHEET.csv"),
@@ -62,6 +69,7 @@ def load_financial_statements(
 def extract_float_column(
     df: pd.DataFrame, candidates: List[str], name: str
 ) -> pd.Series:
+    """Find a numeric column by candidate names and coerce it to floats."""
     for candidate in candidates:
         if candidate in df.columns:
             return pd.to_numeric(df[candidate], errors="coerce")
@@ -75,6 +83,7 @@ def build_historical_dataset(
     balance_sheet: pd.DataFrame,
     cash_flow: pd.DataFrame,
 ) -> pd.DataFrame:
+    """Merge income statement, balance sheet, and cash flow data into a clean historical dataset."""
     financial_data = pd.merge(
         income_statement,
         balance_sheet,

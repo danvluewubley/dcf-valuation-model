@@ -6,6 +6,7 @@ import pandas as pd
 def forecast_financials(
     historical_data: pd.DataFrame, forecast_assumptions: Dict[str, object]
 ) -> pd.DataFrame:
+    """Project future financials using historical results and forecast assumptions."""
     last_year_data = historical_data.iloc[-1]
     forecast_years = int(forecast_assumptions["forecast_years"])
     forecast = forecast_assumptions["forecast"]
@@ -56,6 +57,7 @@ def calculate_ufcf(
     forecasted_data: pd.DataFrame,
     prior_net_working_capital: Optional[float] = None,
 ) -> pd.DataFrame:
+    """Calculate unlevered free cash flow from forecasted financials."""
     forecasted_data = forecasted_data.copy()
     forecasted_data["changeInOperatingNWC"] = forecasted_data["netWorkingCapital"].diff()
     if prior_net_working_capital is not None and len(forecasted_data) > 0:

@@ -4,6 +4,7 @@ import pandas as pd
 
 
 def calculate_dcf_metrics(historical_data: pd.DataFrame) -> pd.DataFrame:
+    """Calculate DCF-related operating metrics from historical financial data."""
     historical_data = historical_data.sort_values("fiscalDateEnding").reset_index(drop=True).copy()
     historical_data["taxRate"] = (
         historical_data["incomeTaxExpense"]
@@ -34,6 +35,7 @@ def calculate_dcf_metrics(historical_data: pd.DataFrame) -> pd.DataFrame:
 def calculate_enterprise_value(
     forecasted_data: pd.DataFrame, forecast_assumptions: Dict[str, object]
 ) -> Tuple[float, float]:
+    """Calculate enterprise value and present value of terminal value from forecasted cash flow."""
     WACC = float(forecast_assumptions["valuation"]["WACC"])
     terminal_growth_rate = float(
         forecast_assumptions["valuation"]["terminal_growth_rate"]
@@ -59,6 +61,7 @@ def calculate_enterprise_value(
 
 
 def calculate_equity_value(enterprise_value: float, historical_data: pd.DataFrame) -> float:
+    """Convert enterprise value to equity value using latest debt and cash balances."""
     return float(
         enterprise_value
         - historical_data["shortTermDebt"].iloc[-1]
@@ -70,6 +73,7 @@ def calculate_equity_value(enterprise_value: float, historical_data: pd.DataFram
 def calculate_intrinsic_value_per_share(
     equity_value: float, historical_data: pd.DataFrame
 ) -> float:
+    """Calculate intrinsic equity value per share from total equity value and shares outstanding."""
     shares_outstanding = float(
         historical_data["commonStockSharesOutstanding"].iloc[-1]
     )

@@ -7,6 +7,7 @@ import requests
 
 
 def get_alpha_vantage_api_key() -> str:
+    """Load the Alpha Vantage API key from the .env file."""
     api_key = dotenv.get_key(dotenv.find_dotenv(), "ALPHA_VANTAGE_API_KEY")
     if not api_key:
         raise ValueError("ALPHA_VANTAGE_API_KEY was not found in the .env file.")
@@ -14,6 +15,7 @@ def get_alpha_vantage_api_key() -> str:
 
 
 def load_stock_price_cache(cache_path: Path, allow_stale: bool = False) -> dict | None:
+    """Load cached stock price data if it exists and is current or stale fallback is allowed."""
     if not cache_path.exists():
         return None
 
@@ -44,6 +46,7 @@ def load_stock_price_cache(cache_path: Path, allow_stale: bool = False) -> dict 
 
 
 def save_stock_price_cache(cache_path: Path, stock_price_data: dict) -> None:
+    """Save stock price data to a JSON cache file for future reuse."""
     cache_contents = {
         "cached_date": date.today().isoformat(),
         "ticker": cache_path.parent.name,
@@ -54,6 +57,7 @@ def save_stock_price_cache(cache_path: Path, stock_price_data: dict) -> None:
 
 
 def download_stock_price_data(ticker: str, api_key: str) -> dict:
+    """Download daily stock price data from Alpha Vantage for the given ticker."""
     response = requests.get(
         "https://www.alphavantage.co/query",
         params={
@@ -98,6 +102,7 @@ def get_stock_price_data(
     api_key: str,
     output_dir: Path,
 ) -> dict:
+    """Retrieve stock price data, using cache fallback when possible."""
     cache_path = output_dir / "stock_price.json"
     cached_data = load_stock_price_cache(cache_path)
     if cached_data is not None:
@@ -121,6 +126,7 @@ def get_stock_price_data(
 
 
 def get_latest_stock_price(stock_price_data: dict) -> float:
+    """Return the latest closing stock price from the Alpha Vantage response."""
     daily_prices = stock_price_data["Time Series (Daily)"]
     latest_date = max(daily_prices.keys())
     latest_close = daily_prices[latest_date]["4. close"]

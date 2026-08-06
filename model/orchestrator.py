@@ -19,6 +19,11 @@ from model.valuation import (
 
 
 def run_model(ticker: str, analysis: str = "standard", wacc=0.1091, terminal_growth_rate=0.025) -> None:
+    """Run a DCF valuation workflow for a given ticker.
+
+    This downloads financial data, builds and validates historical data,
+    forecasts cash flows, and writes valuation outputs.
+    """
     output_dir = Path(__file__).parent.parent / "data" / ticker
     outputs_dir = Path(__file__).parent.parent / "outputs" / ticker
     # Ensure data and outputs directories exist before any writes

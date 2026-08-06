@@ -4,6 +4,7 @@ import pandas as pd
 
 
 def get_custom_forecast_assumptions() -> Dict[str, object]:
+    """Return a custom forecast assumptions template for DCF scenarios."""
     return {
         "forecast_years": 5,
         "forecast": {
@@ -21,6 +22,7 @@ def get_custom_forecast_assumptions() -> Dict[str, object]:
     }
 
 def get_historical_average_forecast_assumptions(historical_data: pd.DataFrame) -> Dict[str, object]:
+    """Derive forecast assumptions using averages from historical financial data."""
     revenue_growth_rate = historical_data["totalRevenue"].pct_change().mean()
     operating_margin = (historical_data["operatingIncome"] / historical_data["totalRevenue"]).mean()
     tax_rate = (historical_data["incomeTaxExpense"] / historical_data["incomeBeforeTax"]).mean()
@@ -52,6 +54,7 @@ def get_historical_average_forecast_assumptions(historical_data: pd.DataFrame) -
     }
     
 def get_bear_forecast_assumptions() -> Dict[str, object]:
+    """Return pessimistic forecast assumptions for a bear-case valuation."""
     return {
         "forecast_years": 5,
         "forecast": {
@@ -69,6 +72,7 @@ def get_bear_forecast_assumptions() -> Dict[str, object]:
     }
     
 def get_bull_forecast_assumptions() -> Dict[str, object]:
+    """Return optimistic forecast assumptions for a bull-case valuation."""
     return {
         "forecast_years": 5,
         "forecast": {
@@ -86,6 +90,7 @@ def get_bull_forecast_assumptions() -> Dict[str, object]:
     }
     
 def get_base_forecast_assumptions() -> Dict[str, object]:
+    """Return a base-case set of forecast assumptions for valuation analysis."""
     return {
         "forecast_years": 5,
         "forecast": {

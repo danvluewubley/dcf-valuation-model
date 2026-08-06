@@ -23,6 +23,7 @@ from model.reverse_dcf_support import (
 
 
 def run_reverse_dcf(ticker: str, reverse_variable: str = "reverse-growth", fade_rate: float = 0.9) -> None:
+    """Run reverse DCF analysis for a ticker based on growth or margin targets."""
     ticker = ticker.upper()
     alpha_vantage_api_key = get_alpha_vantage_api_key()
 
